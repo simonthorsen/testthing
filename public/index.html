@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="div">
+    <h1>Webscraper DBA produkter</h1>
+    <input placeholder="Indtast længde" type="text" id="input">
+    <div id="password">Indtast et tal mellem 1 og 100 </div><span id="pass"></span>
+    <br>
+    <button id="button" onclick="generatePass()">password</button>
+    <button id="btn">API</button>
+    <a href="all.html"><button>Database</button></a>
+    </div>
+    <style>
+        li{
+            list-style: none;
+            display: grid;
+        }
+        ul{
+            border: .5px solid black;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 60%;
+            margin-left: 20%;
+            height: auto;
+        }
+    </style>
+    <script>
+        const button = document.getElementById('btn')
+        button.addEventListener('click', () => {
+            alert('Refresh siden for at se API')
+            window.open('localhost:3001/api/books1')
+        })   
+
+
+        for(let i=1; i<=100; i++){
+        async function API(){
+        const apiurl = 'http://localhost:3001/api/books'+i+'/'
+
+        const response = await fetch(apiurl)
+        const data = await response.json();
+       
+        for(let i=0; i<data.result.length; i++){
+            if(data.result[i].title && data.result[i].price < 100000){
+            const root = document.createElement('ul')
+            const title = document.createElement('li')
+            const price = document.createElement('li')
+            const place = document.createElement('li')
+            const url = document.createElement('a')
+            const img = document.createElement('img')
+            const button = document.createElement('button')
+            const button2 = document.createElement('button')
+
+            
+
+            root.append(title, price, place, url, button, button2, img)
+
+            title.textContent = data.result[i].title;
+            
+            price.textContent = data.result[i].price+',- kr.';
+            
+            price.style.fontWeight = "800"
+            price.style.fontSize = "25px"
+            place.textContent = data.result[i].place;
+
+            url.textContent = data.result[i].url;
+            url.href = data.result[i].url;
+        
+            button.textContent = "Læs mere"
+            button.style.cursor = "pointer"
+
+            button2.textContent = "Se annonce"
+            button2.style.cursor = "pointer"
+
+            img.src = data.result[i].img;
+            img.style.height = "150px"
+          
+
+           
+            document.body.append(root)
+        }
+    }
+}
+API();
+}
+        
+        
+    
+
+        
+    </script>
+</body>
+</html>

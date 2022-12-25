@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="header">
+    <h1>Database&nbsp;<span id="products"></span> </h1></div>
+    <iframe src="index.html" frameborder="0"></iframe>
+    <style>
+        .header{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            background-color: red;
+            position:static;
+        }
+        iframe{
+            position:absolute;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            z-index: -2;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+        *{
+            transition: all .75s ease;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        li{
+            list-style: none;
+            display: grid;
+        }
+        ul{
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: rgb(240, 240, 240);
+            width: 60%;
+            margin-left: 20%;
+            height: auto;
+            border-radius: 20px;
+            padding: 12px;
+        }
+    
+    </style>
+    <script>
+        async function database(){
+            const response = await fetch('/api/all')
+            const data = await response.json()
+
+            console.log(data)
+            document.getElementById('products').textContent = '('+data.length+' products found)';
+
+            for(let i=0; i<data.length;i++){
+                if(data[i].title){
+                const root = document.createElement('ul')
+                const title = document.createElement('li')
+                const price = document.createElement('li')
+                const place = document.createElement('li')
+                const url = document.createElement('a')
+                const img = document.createElement('img')
+
+                root.append(title, price, place, url, img)
+
+                title.textContent = data[i].title;
+                price.textContent = data[i].price+',- kr.';
+                price.style.fontWeight = "800"
+                price.style.fontSize = "25px"
+
+                place.textContent = data[i].place;
+                url.textContent = data[i].url;
+                url.href = data[i].url;
+                img.src = data[i].img;
+                img.addEventListener('mouseover', () => {
+                    img.style.scale = "200%"
+                    img.style.zIndex = "10"
+                })
+                img.addEventListener('mouseout', () => {
+                    img.style.scale = "100%"
+                    img.style.zIndex = "1"
+
+                })
+                img.style.height = "150px"
+                img.style.border = "2px solid black"
+                img.style.borderRadius = "20px"
+
+                
+                root.style.display = "flex"
+
+                document.body.append(root)
+                }
+            }
+        }
+        database()
+    </script>
+
+    
+</body>
+</html>
